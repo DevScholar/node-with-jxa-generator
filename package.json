@@ -1,0 +1,35 @@
+{
+  "name": "@devscholar/node-with-jxa-generator",
+  "version": "0.0.1",
+  "description": "TypeScript type definition generator for JXA (JavaScript for Automation) — generates JXA-style .d.ts from macOS Objective-C frameworks",
+  "type": "module",
+  "bin": {
+    "node-with-jxa-generator": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "LICENSE", "README.md"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@jxa/types": "^1.4.0"
+  },
+  "optionalDependencies": {
+    "objcjs-types": "^0.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.9.3"
+  },
+  "keywords": ["jxa", "macos", "cocoa", "objc", "typescript", "types", "generator", "appkit", "foundation"],
+  "author": "devscholar",
+  "license": "MIT",
+  "engines": { "node": ">=18.0.0" }
+}
