@@ -36,21 +36,37 @@ function parseArgs(argv: string[]) {
     let nowarn = false;
     let help = false;
 
+    function expectValue(flag: string, next: string | undefined): string {
+        if (next === undefined || next.startsWith('-')) {
+            throw new Error(`${flag} requires a value, got ${next === undefined ? 'end of args' : `"${next}"`}`);
+        }
+        return next;
+    }
+
     for (let i = 0; i < args.length; i++) {
         const a = args[i];
         if (a === '-h' || a === '--help') { help = true; }
         else if (a === '--all') { all = true; }
         else if (a === '--list') { list = true; }
         else if (a === '--nowarn') { nowarn = true; }
-        else if (a === '-t' || a === '--typedefs') { output = args[++i] ?? ''; }
+        else if (a === '-t' || a === '--typedefs') { output = expectValue(a, args[++i]); }
         else if (a === '-f' || a === '--framework') {
             // consume all following non-flag tokens as framework names
             while (i + 1 < args.length && !args[i + 1].startsWith('-')) {
                 frameworks.push(args[++i]);
             }
+            if (frameworks.length === 0) {
+                throw new Error(`${a} requires at least one framework name`);
+            }
+        } else if (a === '--') {
+            // explicit positional separator: treat the rest as framework names
+            for (let j = i + 1; j < args.length; j++) frameworks.push(args[j]);
+            break;
         } else if (!a.startsWith('-')) {
-            // positional: treat as framework name
+            // bare positional: framework name
             frameworks.push(a);
+        } else {
+            throw new Error(`Unknown flag: ${a}`);
         }
     }
     return { frameworks, output, all, list, nowarn, help };
@@ -106,4 +122,7 @@ async function main() {
     console.log(`Wrote ${output} (${kb} KB)`);
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch(e => {
+    console.error('Error:', e?.message ?? String(e));
+    process.exit(1);
+});

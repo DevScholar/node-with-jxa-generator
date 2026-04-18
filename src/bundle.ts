@@ -63,7 +63,7 @@ export function resolveFrameworks(requested: string[]): string[] {
     }
 
     for (const r of requested) add(r);
-    return [...needed];
+    return [...needed].sort();
 }
 
 // ---- TypeScript AST transform ------------------------------------------
