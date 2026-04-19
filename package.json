@@ -13,7 +13,7 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist", "LICENSE", "README.md"],
+  "files": ["dist", "LICENSE.md", "README.md"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devscholar/node-with-jxa-generator.git"
